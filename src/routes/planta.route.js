@@ -17,7 +17,9 @@ router.get('/plantas/show',(req,res)=>{
 //mostrar planta por codigo
 router.get('/plantas/:id',(req,res)=>{
     const {id} = req.params;
-    mysqlConnection.query('select * from plantas where codigo=?',[id],(err,rows,fields)=>{
+    const query = 'select * from plantas where codigo=?';
+
+    mysqlConnection.query(query,[id],(err,rows,fields)=>{
         if(!err){
             res.json(rows[0]);
         }else{
@@ -27,24 +29,47 @@ router.get('/plantas/:id',(req,res)=>{
 })
 
 // agregar plantas
-router.post('/plantas/:planta',(req,res)=>{
-    const {codigo,nombre_com,nombre_cient,fecha_plant} = request.body;
+router.post('/plantas/add',(req,res)=>{
+    const {codigo,nombre_comun,nombre_cient,fecha_plant} = req.body;
+    const query = 'insert into plantas(codigo,nombre_comun,nombre_cient,fecha_plant)values(?,?,?,?)';
 
-    mysqlConnection.query('insert into plantas()values(?,?,?,?)',[codigo,nombre_com,nombre_cient,fecha_plant],(err,rows,fields)=>{
+    mysqlConnection.query(query,[codigo,nombre_comun,nombre_cient,fecha_plant],(err,rows,fields)=>{
         if(!err){
             res.json({status:'planta agregada'});
         }else{
-            console.log(err);
+            res.json(err);
         }
-    })
+    })    
 })
 
 // actualizar información de las plantas
-
-
+router.put('/plantas/:id',(req,res)=>{
+    const {nombre_comun,nombre_cient,fecha_plant} = req.body;
+    const {id} = req.params;
+    const query = 'update plantas set nombre_comun=?,nombre_cient=?,fecha_plant=? where codigo=?';
+    
+    mysqlConnection.query(query,[nombre_comun,nombre_cient,fecha_plant,id],(err,rows,fields)=>{
+        if(!err){
+            res.json("planta actualizada con exito");
+        }else{
+            res.json(err)
+        }
+    });
+})
 
 // eliminar plantas
+router.delete('/plantas/delete/:id',(req,res)=>{
+    const {id} = req.params;
+    const query = 'delete from plantas where codigo=?'
 
+    mysqlConnection.query(query,[id],(err,rows,fields)=>{
+        if(!err){
+            res.json("planta ha sido eliminada")
+        }else{
+            res.json(err)
+        }
+    })
+})
 
 
 module.exports = router;
