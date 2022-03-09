@@ -10,6 +10,8 @@ app.use(express.json());
 
 //routes
 app.use(require('./routes/planta.route'));
+app.use(require('./routes/fam_plantas.route'));
+
 
 //starting the server
 app.listen(3000,()=>{
