@@ -11,6 +11,9 @@ app.use(express.json());
 //routes
 app.use(require('./routes/planta.route'));
 app.use(require('./routes/fam_plantas.route'));
+app.use(require('./routes/local_plantas.route'));
+app.use(require('./routes/altura_plantas.route'));
+app.use(require('./routes/vol_plantas.route'));
 
 
 //starting the server

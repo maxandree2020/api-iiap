@@ -7,9 +7,9 @@ const mysqlConnection = require('../database');
 router.get('/fam_plantas/show',(req,res)=>{
     mysqlConnection.query("select*from fam_plantas",(err,rows,fields)=>{
         if(!err){
-            res.json(rows)
+            res.status(200).json(rows)
         }else{
-            res.json(err)
+            res.status(500).json(err.message);
         }
     })
 
@@ -22,9 +22,9 @@ router.get('/fam_plantas/:id', (req,res)=>{
 
     mysqlConnection.query(query,[id],(err,rows,fields)=>{
         if(!err){
-            res.json(rows[0]);
+            res.status(200).json(rows[0]);
         }else{
-            res.json(err)
+            res.status(500).json(err.message)
         }
     })
 })
@@ -51,9 +51,9 @@ router.put('/fam_plantas/edit/:id',(req,res)=>{
 
     mysqlConnection.query(query,[nombre,descripcion,id],(err,roes,fields)=>{
         if(!err){
-            res.json(rows);
+            res.status(200).json({"message": "actualizado correctamente"});
         }else{
-            res.json(err);
+            res.status(500).json(err.message);
         }
     })
 })

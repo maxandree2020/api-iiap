@@ -7,9 +7,9 @@ const mysqlConnection = require('../database')
 router.get('/plantas/show',(req,res)=>{
     mysqlConnection.query('select * from plantas',(err,rows,fields)=>{
         if(!err){
-            res.json(rows);
+            res.status(200).json(rows);
         }else{
-            console.log(err)
+            res.status(500).json(err.message)
         }
     })
 })
@@ -21,38 +21,38 @@ router.get('/plantas/:id',(req,res)=>{
 
     mysqlConnection.query(query,[id],(err,rows,fields)=>{
         if(!err){
-            res.json(rows[0]);
+            res.status(200).json(rows[0]);
         }else{
-            console.log(err)
+            res.status(500).json(err.message)
         }
     })
 })
 
 // agregar plantas
 router.post('/plantas/add',(req,res)=>{
-    const {codigo,nombre_comun,nombre_cient,fecha_plant} = req.body;
-    const query = 'insert into plantas(codigo,nombre_comun,nombre_cient,fecha_plant)values(?,?,?,?)';
+    const {codigo,nombre_comun,nombre_cient,familia,imagen} = req.body;
+    const query = 'insert into plantas()values(?,?,?,?,?)';
 
-    mysqlConnection.query(query,[codigo,nombre_comun,nombre_cient,fecha_plant],(err,rows,fields)=>{
+    mysqlConnection.query(query,[codigo,nombre_comun,nombre_cient,familia,imagen],(err,rows,fields)=>{
         if(!err){
-            res.json({status:'planta agregada'});
+            res.status(200).json({"meesage": "agregado correctamente"});
         }else{
-            res.json(err);
+            res.status(500).json(err.message);
         }
     })    
 })
 
 // actualizar información de las plantas
-router.put('/plantas/:id',(req,res)=>{
-    const {nombre_comun,nombre_cient,fecha_plant} = req.body;
+router.put('/plantas/edit/:id',(req,res)=>{
+    const {nombre_comun,nombre_cient,familia,imagen} = req.body;
     const {id} = req.params;
-    const query = 'update plantas set nombre_comun=?,nombre_cient=?,fecha_plant=? where codigo=?';
+    const query = 'update plantas set nombre_comun=?,nombre_cient=?,familia=?,imagen=? where codigo=?';
     
-    mysqlConnection.query(query,[nombre_comun,nombre_cient,fecha_plant,id],(err,rows,fields)=>{
+    mysqlConnection.query(query,[nombre_comun,nombre_cient,familia,imagen,id],(err,rows,fields)=>{
         if(!err){
-            res.json("planta actualizada con exito");
+            res.status(200).json("planta actualizada con exito");
         }else{
-            res.json(err)
+            res.status(500).json(err.message)
         }
     });
 })
@@ -64,9 +64,9 @@ router.delete('/plantas/delete/:id',(req,res)=>{
 
     mysqlConnection.query(query,[id],(err,rows,fields)=>{
         if(!err){
-            res.json("planta ha sido eliminada")
+            res.status(200).json("eliminado correctamente")
         }else{
-            res.json(err)
+            res.status(500).json(err.message)
         }
     })
 })
